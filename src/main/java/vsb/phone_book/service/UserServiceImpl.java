@@ -53,4 +53,15 @@ public class UserServiceImpl implements UserService {
     public boolean delete(int id) {
         return USER_REPO.remove(id) != null;
     }
+
+    @Override
+    public List <User> findByName(String name) {
+        ArrayList<User> matchList = new ArrayList<>();
+        for(User user : USER_REPO.values()) {
+            if(user.getName().toLowerCase().contains(name.toLowerCase())) {
+                matchList.add(user);
+            }
+        }
+        return matchList;
+    }
 }

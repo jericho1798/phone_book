@@ -16,4 +16,6 @@ public interface pbEntryService {
     boolean updateEntry(User user, pbEntry entry, int eId);
 
     boolean deleteEntry(User user, int eId);
+
+    List <pbEntry> findByNumber(User user, String number);
 }

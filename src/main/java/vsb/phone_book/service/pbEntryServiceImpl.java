@@ -38,4 +38,15 @@ public class pbEntryServiceImpl implements pbEntryService {
     public boolean deleteEntry(User user, int eId) {
         return user.getPHONE_BOOK().remove(eId) != null;
     }
+
+    @Override
+    public List<pbEntry> findByNumber(User user, String number) {
+        ArrayList<pbEntry> entries = new ArrayList<>();
+        for(pbEntry entry : user.getPHONE_BOOK().values()) {
+            if(entry.getNumber().equals(number)) {
+                entries.add(entry);
+            }
+        }
+        return entries;
+    }
 }

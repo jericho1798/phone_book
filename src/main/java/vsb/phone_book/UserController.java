@@ -1,6 +1,5 @@
 package vsb.phone_book;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,6 +73,15 @@ public class UserController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
+    //User search by name or part of it
+    @GetMapping(value = "/users/findByName/{name}")
+    public ResponseEntity<List<User>> findByName(@PathVariable(name = "name") String name) {
+        final List<User> matchList = userService.findByName(name);
+        return !matchList.isEmpty()
+                ? new ResponseEntity<>(matchList, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     //Entry create
     @PostMapping(value = "/users/{id}/add")
     public ResponseEntity<?> createEntry(@PathVariable(name = "id") int id, @RequestBody pbEntry entry) {
@@ -139,6 +147,20 @@ public class UserController {
             return deleted
                     ? new ResponseEntity<>(HttpStatus.OK)
                     : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+    }
+
+    //Entry search by phone number
+    @GetMapping(value = "/users/{id}/findByNum/{num}")
+    public ResponseEntity<List<pbEntry>> findByNumber(@PathVariable(name = "id") int id, @PathVariable(name = "num") String num) {
+        if(userService.read(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            final User user = userService.read(id);
+            final List<pbEntry> entries = pbEntryService.findByNumber(user, num);
+            return !entries.isEmpty()
+                    ? new ResponseEntity<>(entries, HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
