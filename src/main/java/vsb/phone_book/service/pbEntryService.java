@@ -1,18 +1,19 @@
 package vsb.phone_book.service;
 
+import vsb.phone_book.model.User;
 import vsb.phone_book.model.pbEntry;
 
 import java.util.List;
 
 public interface pbEntryService {
 
-    void create(pbEntry entry);
+    void create(User user, pbEntry entry);
 
-    List<pbEntry> readAll();
+    List<pbEntry> readAllEntry(User user);
 
-    pbEntry read(int id);
+    pbEntry readEntry(User user, int eId);
 
-    boolean update(pbEntry entry, int id);
+    boolean updateEntry(User user, pbEntry entry, int eId);
 
-    boolean delete(int id);
+    boolean deleteEntry(User user, int eId);
 }

@@ -1,23 +1,31 @@
 package vsb.phone_book;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vsb.phone_book.model.User;
+import vsb.phone_book.model.pbEntry;
 import vsb.phone_book.service.UserService;
+import vsb.phone_book.service.pbEntryService;
 
 import java.util.List;
+
+
 
 @RestController
 public class UserController {
 
     private final UserService userService;
+    private final pbEntryService pbEntryService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, pbEntryService pbEntryService) {
         this.userService = userService;
+        this.pbEntryService = pbEntryService;
     }
+
 
 
     //User create
@@ -27,10 +35,10 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //User findAll
+    //User readAll
     @GetMapping(value = "/users")
-    public ResponseEntity<List<User>> read() {
-        final List<User> users = userService.readAll();
+    public ResponseEntity<List<String>> readAll() {
+        final List<String> users = userService.readAll();
 
         return users != null && !users.isEmpty()
                 ? new ResponseEntity<>(users, HttpStatus.OK)
@@ -41,7 +49,6 @@ public class UserController {
     @GetMapping(value = "/users/{id}")
     public ResponseEntity<User> read(@PathVariable(name = "id") int id) {
         final  User user = userService.read(id);
-
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -57,7 +64,7 @@ public class UserController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    //USer delete
+    //User delete
     @DeleteMapping(value = "/users/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
         final boolean deleted = userService.delete(id);
@@ -66,4 +73,73 @@ public class UserController {
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+
+    //Entry create
+    @PostMapping(value = "/users/{id}/add")
+    public ResponseEntity<?> createEntry(@PathVariable(name = "id") int id, @RequestBody pbEntry entry) {
+        if(userService.read(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            final User user = userService.read(id);
+            pbEntryService.create(user, entry);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+    }
+
+    //Entry readAll
+    @GetMapping(value = "/users/{id}/all")
+    public ResponseEntity<List<pbEntry>> readAllEntry(@PathVariable(name = "id") int id) {
+        if(userService.read(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            final List<pbEntry> entries = pbEntryService.readAllEntry(userService.read(id));
+
+            return entries != null && !entries.isEmpty()
+                    ? new ResponseEntity<>(entries, HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Entry read
+    @GetMapping(value = "/users/{id}/{eId}")
+    public ResponseEntity<pbEntry> readEntry(@PathVariable(name = "id") int id, @PathVariable(name = "eId") int eId) {
+        if(userService.read(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            final User user = userService.read(id);
+            final pbEntry entry = user.getPHONE_BOOK().get(eId);
+            return entry != null
+                    ? new ResponseEntity<>(entry, HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Entry update
+    @PutMapping(value = "/users/{id}/{eId}")
+    public ResponseEntity<?> updateEntry(@PathVariable(name = "id") int id, @PathVariable(name = "eId") int eId, @RequestBody pbEntry entry) {
+        if(userService.read(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            final User user = userService.read(id);
+            final boolean updated = pbEntryService.updateEntry(user, entry, eId);
+            return updated
+                    ? new ResponseEntity<>(HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+    }
+
+    //Entry delete
+    @DeleteMapping(value = "/users/{id}/{eId}")
+    public ResponseEntity<?> deleteEntry(@PathVariable(name = "id") int id, @PathVariable(name = "eId") int eId) {
+        if(userService.read(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            final User user = userService.read(id);
+            final boolean deleted = pbEntryService.deleteEntry(user, eId);
+            return deleted
+                    ? new ResponseEntity<>(HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+    }
+
 }

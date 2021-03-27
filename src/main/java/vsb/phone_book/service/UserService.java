@@ -8,7 +8,7 @@ public interface UserService {
 
     void create(User user);
 
-    List<User> readAll();
+    List<String> readAll();
 
     User read(int id);
 

@@ -2,17 +2,20 @@ package vsb.phone_book.model;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-import java.util.Map;
+import java.util.HashMap;
 
 @Data
 public class User {
 
-    @NotNull(message = "Set ID")
     private Integer id;
 
-    @NotNull(message = "Enter a name!")
     private String name;
 
-    private Map<Integer, pbEntry> PHONE_BOOK;
+    private HashMap<Integer, pbEntry> PHONE_BOOK = new HashMap<>();
+
+    public void setPHONE_BOOK(pbEntry entry) {
+        int i = PHONE_BOOK.size() + 1;
+        entry.setId(i);
+        PHONE_BOOK.put(i, entry);
+    }
 }

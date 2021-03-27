@@ -26,8 +26,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> readAll() {
-        return new ArrayList<User>(USER_REPO.values());
+    public List<String> readAll() {
+        ArrayList<String> users = new ArrayList<>();
+        for(User a: USER_REPO.values()) {
+            users.add(a.getName());
+        }
+        return  users;
+        //return new ArrayList<User>(USER_REPO.values());
     }
 
     @Override
