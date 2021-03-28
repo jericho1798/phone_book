@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/test/java/vsb/phone_book/service/pbEntryServiceImplTest.java
+/src/test/java/vsb/phone_book/service/UserServiceImplTest.java
+/src/test/java/vsb/phone_book/UserControllerTest.java
