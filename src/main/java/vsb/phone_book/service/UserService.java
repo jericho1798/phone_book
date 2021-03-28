@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserService {
 
-    void create(User user);
+    boolean create(User user);
 
     List<String> readAll();
 

@@ -2,6 +2,7 @@ package vsb.phone_book.model;
 
 import lombok.Data;
 
+
 import java.util.HashMap;
 
 @Data
@@ -18,4 +19,5 @@ public class User {
         entry.setId(i);
         PHONE_BOOK.put(i, entry);
     }
+
 }

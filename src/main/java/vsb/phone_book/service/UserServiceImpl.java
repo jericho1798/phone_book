@@ -19,10 +19,14 @@ public class UserServiceImpl implements UserService {
     private static  final AtomicInteger USER_ID_HOLDER = new AtomicInteger();
 
     @Override
-    public void create(User user) {
-        final  int userId = USER_ID_HOLDER.incrementAndGet();
-        user.setId(userId);
-        USER_REPO.put(userId, user);
+    public boolean create(User user) {
+        if(user.getName() != null && !user.getName().isEmpty()) {
+            final  int userId = USER_ID_HOLDER.incrementAndGet();
+            user.setId(userId);
+            USER_REPO.put(userId, user);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -32,7 +36,6 @@ public class UserServiceImpl implements UserService {
             users.add(a.getName());
         }
         return  users;
-        //return new ArrayList<User>(USER_REPO.values());
     }
 
     @Override
@@ -43,8 +46,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean update(User user, int id) {
         if(USER_REPO.containsKey(id)) {
-            user.setId(id);
-            USER_REPO.put(id, user);
+            if(user.getName() != null && !user.getName().isEmpty()) {
+                user.setId(id);
+                USER_REPO.put(id, user);
+            } else {
+                return false;
+            }
+            return true;
         }
         return false;
     }
@@ -65,3 +73,4 @@ public class UserServiceImpl implements UserService {
         return matchList;
     }
 }
+

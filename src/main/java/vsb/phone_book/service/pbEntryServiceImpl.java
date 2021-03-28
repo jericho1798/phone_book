@@ -9,9 +9,16 @@ import java.util.List;
 
 @Service
 public class pbEntryServiceImpl implements pbEntryService {
+
     @Override
-    public void create(User user, pbEntry entry) {
-        user.setPHONE_BOOK(entry);
+    public boolean create(User user, pbEntry entry) {
+        if(entry.getNumber()!=null && !entry.getNumber().isEmpty()
+                && entry.getName()!=null && !entry.getName().isEmpty()
+                && entry.getNumber().matches("\\d+")) {
+            user.setPHONE_BOOK(entry);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -28,8 +35,15 @@ public class pbEntryServiceImpl implements pbEntryService {
     @Override
     public boolean updateEntry(User user, pbEntry entry, int eId) {
         if(user.getPHONE_BOOK().containsKey(eId)) {
-            entry.setId(eId);
-            user.getPHONE_BOOK().put(eId, entry);
+            if(entry.getNumber() != null && !entry.getNumber().isEmpty()
+                    && entry.getName() != null && !entry.getName().isEmpty()
+                    && entry.getNumber().matches("\\d+")) {
+                entry.setId(eId);
+                user.getPHONE_BOOK().put(eId, entry);
+            } else {
+                return false;
+            }
+            return true;
         }
         return false;
     }

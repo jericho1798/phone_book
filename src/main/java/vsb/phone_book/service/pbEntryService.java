@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface pbEntryService {
 
-    void create(User user, pbEntry entry);
+    boolean create(User user, pbEntry entry);
 
     List<pbEntry> readAllEntry(User user);
 

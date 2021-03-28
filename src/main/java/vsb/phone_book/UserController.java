@@ -28,15 +28,17 @@ public class UserController {
 
 
     //User create
-    @PostMapping(value = "/users")
+    @PostMapping("/users")
     public ResponseEntity<?> create(@RequestBody User user) {
-        userService.create(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return userService.create(user)
+                ? new ResponseEntity<>(HttpStatus.CREATED)
+                : new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     //User readAll
-    @GetMapping(value = "/users")
+    @GetMapping("/users")
     public ResponseEntity<List<String>> readAll() {
+
         final List<String> users = userService.readAll();
 
         return users != null && !users.isEmpty()
@@ -45,17 +47,20 @@ public class UserController {
     }
 
     //User read
-    @GetMapping(value = "/users/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<User> read(@PathVariable(name = "id") int id) {
         final  User user = userService.read(id);
+
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     //User update
-    @PutMapping(value = "/users/{id}")
-    public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody User user) {
+    @PutMapping("/users/{id}")
+    public ResponseEntity<?> update(@PathVariable(name = "id") int id,
+                                    @RequestBody User user) {
+
         final boolean updated = userService.update(user, id);
 
         return updated
@@ -64,8 +69,9 @@ public class UserController {
     }
 
     //User delete
-    @DeleteMapping(value = "/users/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
+
         final boolean deleted = userService.delete(id);
 
         return deleted
@@ -74,8 +80,9 @@ public class UserController {
     }
 
     //User search by name or part of it
-    @GetMapping(value = "/users/findByName/{name}")
+    @GetMapping("/users/findByName/{name}")
     public ResponseEntity<List<User>> findByName(@PathVariable(name = "name") String name) {
+
         final List<User> matchList = userService.findByName(name);
         return !matchList.isEmpty()
                 ? new ResponseEntity<>(matchList, HttpStatus.OK)
@@ -83,20 +90,22 @@ public class UserController {
     }
 
     //Entry create
-    @PostMapping(value = "/users/{id}/add")
-    public ResponseEntity<?> createEntry(@PathVariable(name = "id") int id, @RequestBody pbEntry entry) {
+    @PostMapping("/users/{id}/add")
+    public ResponseEntity<?> createEntry(@PathVariable(name = "id") int id,
+                                         @RequestBody pbEntry entry) {
         if(userService.read(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            final User user = userService.read(id);
-            pbEntryService.create(user, entry);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return pbEntryService.create(userService.read(id), entry)
+                    ? new ResponseEntity<>(HttpStatus.CREATED)
+                    : new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     //Entry readAll
-    @GetMapping(value = "/users/{id}/all")
+    @GetMapping("/users/{id}/all")
     public ResponseEntity<List<pbEntry>> readAllEntry(@PathVariable(name = "id") int id) {
+
         if(userService.read(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
@@ -109,8 +118,10 @@ public class UserController {
     }
 
     //Entry read
-    @GetMapping(value = "/users/{id}/{eId}")
-    public ResponseEntity<pbEntry> readEntry(@PathVariable(name = "id") int id, @PathVariable(name = "eId") int eId) {
+    @GetMapping("/users/{id}/{eId}")
+    public ResponseEntity<pbEntry> readEntry(@PathVariable(name = "id") int id,
+                                             @PathVariable(name = "eId") int eId) {
+
         if(userService.read(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
@@ -123,8 +134,11 @@ public class UserController {
     }
 
     //Entry update
-    @PutMapping(value = "/users/{id}/{eId}")
-    public ResponseEntity<?> updateEntry(@PathVariable(name = "id") int id, @PathVariable(name = "eId") int eId, @RequestBody pbEntry entry) {
+    @PutMapping("/users/{id}/{eId}")
+    public ResponseEntity<?> updateEntry(@PathVariable(name = "id") int id,
+                                         @PathVariable(name = "eId") int eId,
+                                         @RequestBody pbEntry entry) {
+
         if(userService.read(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
@@ -137,8 +151,10 @@ public class UserController {
     }
 
     //Entry delete
-    @DeleteMapping(value = "/users/{id}/{eId}")
-    public ResponseEntity<?> deleteEntry(@PathVariable(name = "id") int id, @PathVariable(name = "eId") int eId) {
+    @DeleteMapping("/users/{id}/{eId}")
+    public ResponseEntity<?> deleteEntry(@PathVariable(name = "id") int id,
+                                         @PathVariable(name = "eId") int eId) {
+
         if(userService.read(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
@@ -151,8 +167,10 @@ public class UserController {
     }
 
     //Entry search by phone number
-    @GetMapping(value = "/users/{id}/findByNum/{num}")
-    public ResponseEntity<List<pbEntry>> findByNumber(@PathVariable(name = "id") int id, @PathVariable(name = "num") String num) {
+    @GetMapping("/users/{id}/findByNum/{num}")
+    public ResponseEntity<List<pbEntry>> findByNumber(@PathVariable(name = "id") int id,
+                                                      @PathVariable(name = "num") String num) {
+
         if(userService.read(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
