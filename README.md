@@ -1,7 +1,7 @@
 # phone_book
 Описание:
 
-Код программы и юнит тесты расположены в phone_book/src:
+Код программы и юнит тесты расположены в:
 
     UserController : src/main/java/vsb/phone_book,
 
