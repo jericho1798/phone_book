@@ -1,6 +1,10 @@
 # phone_book📲
 Описание:
 
+Запуск:
+
+Перейти в phone_book/out/artifacts/phone_book_jar/ -> java -jar .\phone_book.jar
+
 Код программы и юнит тесты расположены в :
 
     UserController : src/main/java/vsb/phone_book,
