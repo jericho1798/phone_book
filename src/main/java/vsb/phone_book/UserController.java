@@ -45,7 +45,7 @@ public class UserController {
 
 
     /**
-     * @return List of all Users and HttpStatus.OK if it's not null or empty otherwise HttpStatus.NOT_FOUND
+     * @return List of all User Names and HttpStatus.OK if it's not null or empty otherwise HttpStatus.NOT_FOUND
      */
     @GetMapping("/users")
     public ResponseEntity<List<String>> readAll() {

@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
                     USER_REPO.put(id, user);
                 } else {
                     user.setPB(USER_REPO.get(id).getPHONE_BOOK());
+                    USER_REPO.put(id, user);
                 }
             } else {
                 return false;
