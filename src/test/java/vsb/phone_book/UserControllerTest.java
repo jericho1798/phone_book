@@ -18,6 +18,10 @@ import vsb.phone_book.service.UserServiceImpl;
 import vsb.phone_book.service.pbEntryService;
 import vsb.phone_book.service.pbEntryServiceImpl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -27,6 +31,9 @@ class UserControllerTest {
 
     private User user;
     private pbEntry entry;
+    private List<String> actual;
+    private List<pbEntry> actualE;
+
     @Autowired
     private  UserService userService;
     @Autowired
@@ -36,6 +43,8 @@ class UserControllerTest {
     @BeforeEach
     void setUp() {
         userService = new UserServiceImpl();
+        actual = new ArrayList<>();
+        actualE = new ArrayList<>();
         pbEntryService = new pbEntryServiceImpl();
         userController = new UserController(userService, pbEntryService);
         user = new User();
@@ -44,13 +53,16 @@ class UserControllerTest {
         entry.setName("entry1");
         entry.setNumber("88127407761");
         user.setPHONE_BOOK(entry);
-
+        actual.add(user.getName());
+        actualE.add(entry);
         userController.create(user);
     }
 
     @AfterEach
     void tearDown() {
         userController.delete(user.getId());
+        actual.clear();
+        actualE.clear();
     }
 
     @Test
@@ -60,16 +72,19 @@ class UserControllerTest {
         Assert.assertEquals(userController.create(userNew).getStatusCode(), HttpStatus.NO_CONTENT);
         userNew.setName("Name");
         Assert.assertEquals(userController.create(userNew).getStatusCode(), HttpStatus.CREATED);
+        userController.delete(userNew.getId());
     }
 
     @Test
     void readAll() {
         Assert.assertEquals(userController.readAll().getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(userController.readAll().getBody(), actual);
     }
 
     @Test
     void read() {
         Assert.assertEquals(userController.read(user.getId()).getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(userController.read(user.getId()).getBody(), user);
         Assert.assertEquals(userController.read(-1).getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
@@ -92,6 +107,7 @@ class UserControllerTest {
     @Test
     void findByName() {
         Assert.assertEquals(userController.findByName("user1").getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(userController.findByName("user1").getBody(), new ArrayList<User>(Arrays.asList(user)));
         Assert.assertEquals(userController.findByName("qwe").getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
@@ -106,12 +122,14 @@ class UserControllerTest {
     @Test
     void readAllEntry() {
         Assert.assertEquals(userController.readAllEntry(user.getId()).getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(userController.readAllEntry(user.getId()).getBody(), actualE);
         Assert.assertEquals(userController.readAllEntry(-1).getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
     @Test
     void readEntry() {
         Assert.assertEquals(userController.readEntry(user.getId(), entry.getId()).getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(userController.readEntry(user.getId(), entry.getId()).getBody(), entry);
         Assert.assertEquals(userController.readEntry(user.getId(), -1).getStatusCode(), HttpStatus.NOT_FOUND);
         Assert.assertEquals(userController.readEntry(-1, entry.getId()).getStatusCode(), HttpStatus.NOT_FOUND);
     }
@@ -134,6 +152,8 @@ class UserControllerTest {
     void findByNumber() {
         Assert.assertEquals(userController.findByNumber(user.getId(), "12345").getStatusCode(), HttpStatus.NOT_FOUND);
         Assert.assertEquals(userController.findByNumber(user.getId(), "88127407761").getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(userController.findByNumber(user.getId(), "88127407761").getBody(), actualE);
         Assert.assertEquals(userController.findByNumber(-1, "").getStatusCode(), HttpStatus.NOT_FOUND);
     }
+
 }

@@ -1,4 +1,4 @@
-package vsb.phone_book.service;
+package vsb.phone_book;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import vsb.phone_book.model.User;
 import vsb.phone_book.model.pbEntry;
+import vsb.phone_book.service.UserServiceImpl;
+import vsb.phone_book.service.pbEntryServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;

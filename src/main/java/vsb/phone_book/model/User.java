@@ -20,4 +20,8 @@ public class User {
         PHONE_BOOK.put(i, entry);
     }
 
+    public void setPB(HashMap<Integer, pbEntry> phone_book) {
+        PHONE_BOOK.putAll(phone_book);
+    }
+
 }

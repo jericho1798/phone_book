@@ -1,4 +1,4 @@
-package vsb.phone_book.service;
+package vsb.phone_book;
 
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import vsb.phone_book.model.User;
 import vsb.phone_book.model.pbEntry;
+import vsb.phone_book.service.UserServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;

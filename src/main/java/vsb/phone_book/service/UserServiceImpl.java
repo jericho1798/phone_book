@@ -48,7 +48,11 @@ public class UserServiceImpl implements UserService {
         if(USER_REPO.containsKey(id)) {
             if(user.getName() != null && !user.getName().isEmpty()) {
                 user.setId(id);
-                USER_REPO.put(id, user);
+                if(user.getPHONE_BOOK() != null && !user.getPHONE_BOOK().isEmpty()) {
+                    USER_REPO.put(id, user);
+                } else {
+                    user.setPB(USER_REPO.get(id).getPHONE_BOOK());
+                }
             } else {
                 return false;
             }
