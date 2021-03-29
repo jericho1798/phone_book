@@ -29,4 +29,6 @@
 
 ![alt text](screenshots/deleteUser.png "DELETE /users/{id}")
 
+![alt text](screenshots/put_updateUser.png "PUT /users/{id}")
+
 
